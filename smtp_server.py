@@ -1,4 +1,4 @@
-"""Base class of SMTP Server"""
+"""Base class of SMTP Server."""
 import socket
 from select import select
 
@@ -9,10 +9,10 @@ to_monitor = []
 
 
 class SMTPServer:
-    """SMTP Server"""
+    """SMTP Server."""
 
     def __init__(self):
-        """Init socket"""
+        """Init socket."""
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.setsockopt(
             socket.SOL_SOCKET, socket.SO_REUSEADDR, 1
@@ -41,12 +41,12 @@ class SMTPServer:
                 else:
                     self._send_message(sock)
 
-    def start_server(self):
-        """Start SMTP server"""
+    def run(self):
+        """Start SMTP server."""
         to_monitor.append(self.server_socket)
         self._event_loop()
 
 
 if __name__ == '__main__':
     server = SMTPServer()
-    server.start_server()
+    server.run()
