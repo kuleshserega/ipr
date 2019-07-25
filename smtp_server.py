@@ -3,6 +3,7 @@ import socket
 from select import select
 
 from settings import HOST, PORT, MSG_SIZE
+from response import BaseSMTPResponseHandler
 
 
 to_monitor = []
@@ -19,16 +20,25 @@ class SMTPServer:
         )
         self.server_socket.bind((HOST, PORT))
         self.server_socket.listen()
+        self._response_handler = None
 
     def _accept_connection(self, server_socket):
         client_socket, addr = self.server_socket.accept()
+
+        self._response_handler = BaseSMTPResponseHandler()
+        response = self._response_handler.init_connection()
+        client_socket.send(response.encode())
+
         to_monitor.append(client_socket)
 
     def _send_message(self, client_socket):
         request = client_socket.recv(MSG_SIZE)
         if request:
-            response = 'Response from request: %s\n' % request
+            cleaned_request = request.decode().replace('\n', '')
+            response = self._response_handler.render_response(cleaned_request)
             client_socket.send(response.encode())
+            if response == 'QUIT\n':
+                client_socket.close()
         else:
             client_socket.close()
 
