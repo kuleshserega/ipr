@@ -36,6 +36,8 @@ class SMTPServer:
     def _send_message(self, client_socket):
         response = self._handle_client_socket_request(client_socket)
         client_socket.send(response.encode())
+        if response == 'QUIT\n':
+            client_socket.close()
 
     def _event_loop(self):
         while True:

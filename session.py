@@ -12,7 +12,6 @@ class SMTPSession:
     def attach_conection(self, client_socket):
         handler = BaseSMTPResponseHandler()
         start_msg = handler.start_msg()
-        print(start_msg)
         client_socket.send(start_msg.encode())
         connection_id = client_socket.fileno()
         self.connection_handlers[connection_id] = handler
@@ -42,6 +41,4 @@ class SMTPSession:
 
     def make_response(self, client_socket):
         response = self._process_request(client_socket)
-        if response == 'QUIT\n':
-            client_socket.close()
         return response
