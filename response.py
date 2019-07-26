@@ -10,7 +10,7 @@ class BaseSMTPResponseHandler:
         }
         self.email_msg = ''
 
-    def init_connection(self):
+    def start_msg(self):
         return 'SMTP banner (Please enter HELO):\n'
 
     def render_response(self, request):
