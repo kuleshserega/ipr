@@ -1,4 +1,5 @@
 from response import BaseSMTPResponseHandler
+from smtp_states import SMTPHelloState
 from exceptions import SMTPConnectionClosedException
 from settings import MSG_SIZE
 
@@ -10,7 +11,7 @@ class SMTPSession:
         self.connection_handler = None
 
     def attach_conection(self, client_socket):
-        handler = BaseSMTPResponseHandler()
+        handler = BaseSMTPResponseHandler(SMTPHelloState())
         start_msg = handler.start_msg()
         client_socket.send(start_msg.encode())
         connection_id = client_socket.fileno()

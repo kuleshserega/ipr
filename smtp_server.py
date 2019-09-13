@@ -3,7 +3,6 @@ import socket
 from select import select
 
 from settings import HOST, PORT
-# from response import BaseSMTPResponseHandler
 from session import SMTPSession
 
 
